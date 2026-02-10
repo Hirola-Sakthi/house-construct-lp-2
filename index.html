@@ -334,10 +334,12 @@
             .hero-content {
                 margin-top: 60px;
             }
-            .nav-link{
+
+            .nav-link {
                 font-size: 12px;
             }
-            .main-logo{
+
+            .main-logo {
                 height: 68px !important;
             }
         }
@@ -388,7 +390,8 @@
                             Bangalore</span>
                     </h1>
                     <p class="text-gray-500 text-base md:text-lg leading-relaxed mb-8 max-w-lg font-light">
-                        Crafting dream homes with precision and transparency — from design to final handover. No subcontracting. No delays. 400+ satisfied homeowners and counting.
+                        Crafting dream homes with precision and transparency — from design to final handover. No
+                        subcontracting. No delays. 400+ satisfied homeowners and counting.
                     </p>
                 </div>
 
@@ -439,10 +442,9 @@
 
     <!-- LEGAL GUIDE SECTION -->
     <section class="bg-[#fafafa]">
-        <!-- <div class="w-full">
-            <img src="/assets/images/blog-banner-img-1.png" alt="Home construction legal checklist Bangalore"
-                class="w-full h-full object-cover" />
-        </div> -->
+        <img src="/assets/images/blog-banner-img-1.png" alt="Home construction legal checklist Bangalore"
+            class="w-[80%] h-full mx-auto object-cover" />
+
         <div class="max-w-4xl mx-auto px-6 py-16 space-y-14 text-[17px] leading-relaxed text-gray-700">
             <div>
                 <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">
@@ -687,6 +689,43 @@
         </div>
     </div>
 
+    <!-- PAGE LOADING MODAL -->
+    <div id="pageLoadModal" class="modal-overlay" onclick="closeModalOutside(event)">
+        <div class="modal-content">
+            <div
+                class="absolute top-0 left-8 right-8 h-[3px] bg-gradient-to-r from-gold/0 via-gold to-gold/0 rounded-b-full">
+            </div>
+            <div class="text-center mb-5">
+                <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-1">Why Wait?</p>
+                <h3 class="text-2xl font-bold text-dark">Start Building Your<br>Dream Home Today!</h3>
+                <p class="text-gray-400 text-sm mt-1.5">Get free Vaastu consultation</p>
+            </div>
+            <form id="modalForm" class="space-y-3" onsubmit="handleSubmit(event, 'pageload')" action="/contact_form.php"
+                method="POST">
+                <input type="text" name="name" placeholder="Your Full Name" required class="form-input">
+                <input type="tel" name="phone" placeholder="Mobile Number" required class="form-input"
+                    pattern="[0-9]{10}">
+                <input type="email" name="email" placeholder="Email Address" required class="form-input">
+                <input type="text" name="location" placeholder="Plot Location" required class="form-input">
+                <select name="plotSize" required class="form-input"
+                    style="appearance:none; color:#aaa; background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23c3921c%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>'); background-repeat: no-repeat; background-position: right 16px center;">
+                    <option value="" disabled selected>Select Plot Size</option>
+                    <option value="20x30">20 × 30</option>
+                    <option value="30x40">30 × 40</option>
+                    <option value="30x50">30 × 50</option>
+                    <option value="40x60">40 × 60</option>
+                    <option value="50x80">50 × 80</option>
+                    <option value="custom">Custom Size</option>
+                </select>
+                <button type="submit" class="btn-gold w-full justify-center !mt-4">Get Free Consultation <svg width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg></button>
+            </form>
+            <p class="text-center text-gray-300 text-xs mt-3">100% Free · No Spam · Instant Response</p>
+        </div>
+    </div>
+
     <!-- SUCCESS TOAST -->
     <div id="successToast"
         class="fixed bottom-6 right-6 bg-white border border-green-200 rounded-xl px-5 py-4 z-[10001] flex items-center gap-3 opacity-0 translate-y-4 transition-all duration-500 pointer-events-none shadow-lg">
@@ -774,8 +813,10 @@
         gsap.from('.process-step', { scrollTrigger: { trigger: '#process', start: 'top 70%', once: true }, y: 40, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'back.out(1.4)' });
 
         // Modal
+        function openPageLoadModal() { document.getElementById('pageLoadModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closePageLoadModal() { document.getElementById('pageLoadModal').classList.remove('active'); document.body.style.overflow = ''; localStorage.setItem('pageLoadFormSubmitted', 'true'); }
         function openModal() { document.getElementById('formModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
-        function closeModal() { document.getElementById('formModal').classList.remove('active'); document.body.style.overflow = ''; }
+        function closeModal() { localStorage.setItem('pageLoadFormSubmitted', 'true'); document.getElementById('formModal').classList.remove('active'); document.body.style.overflow = ''; }
         function closeModalOutside(e) { if (e.target === e.currentTarget) closeModal(); }
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
@@ -819,9 +860,11 @@
                         // if (source === 'modal') {
                         //     localStorage.setItem('formSubmitted', 'true');
                         // } 
+                        // if (source === 'modal')
+                        localStorage.setItem('pageLoadFormSubmitted', 'true');
                         showToast();
-                        if (source === 'modal') closeModal();
-
+                        closeModal();
+                        closePageLoadModal();
                         form.reset();
 
 
@@ -861,6 +904,18 @@
         // Select fix
         document.querySelectorAll('select.form-input').forEach(s => { s.addEventListener('change', function () { this.style.color = this.value ? '#1a1a1a' : '#aaa'; }); });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const alreadySubmitted = localStorage.getItem("pageLoadFormSubmitted");
+
+            if (!alreadySubmitted) {
+                setTimeout(() => {
+                    openPageLoadModal();
+                }, 0);
+            }
+        });
+    </script>
+
 </body>
 
 </html>
